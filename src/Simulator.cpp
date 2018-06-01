@@ -124,8 +124,12 @@ void Simulator::setup()
         -limit, -limit, limit,
         -limit, limit, limit,   
     };
-    
+    /* sizeof(): Size in byte of a particle
+    * => Multiply the size with the number of particles to have the 
+    *    size of all particles
+    */
     particules = new Buffer(pp.data(), pp.size()*sizeof(Particule));
+	
     lines = new Buffer(linesPoint, sizeof(linesPoint));
 
     /*vec3 veloc[] = {
@@ -146,9 +150,17 @@ void Simulator::setup()
     renderer->setVertexData("vertex", particules, TYPE_FLOAT, 0, 3, sizeof(Particule));
 
     linesRenderer = program->createRenderer();
+    // Last param: Size between vertices in byte	
     linesRenderer->setVertexData("vertex", lines, TYPE_FLOAT, 0, 3, 3*sizeof(float));
-
+    
+    /* perspective(Zoom, Window_Screen,Near_plan,Far_plan) */
     mat4 projection = perspective(90.0f, 640.0/480.0, 0.1, 100);
+   
+   /* lookat() Params
+    * 1 : CAM positon
+    * 2 : Where the CAM looks at
+    * 3 : Reference axis (y here because only one different from 0)
+    */ 
     mat4 view = lookat(vec3(30, 10,6), vec3(0, 0, 0), vec3(0, 1, 0));
 
     renderer->setMatrix("projectionMatrix", projection);
